@@ -13,7 +13,7 @@ export class UserComponent {
   // @Input({ required: true }) id!: string;
   // id = input.required<string>();
   // avatar = input.required<string>();
-   name = input.required<string>();
+  // name = input.required<string>();
 
   @Input({ required: true }) user!: User;
   @Input({required: true}) selected!: boolean;

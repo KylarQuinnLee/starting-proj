@@ -66,7 +66,7 @@ export class AppTasksComponent {
   }
 
   addNewTask(task: Task) {
-    task.userId = this.user.id;
+    task.userId = this.user?.id ? this.user.id : '';
     this.dummyTasks.push(task);
     this.isAddingTask = false;
   }
