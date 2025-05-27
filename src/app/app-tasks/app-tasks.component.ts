@@ -1,52 +1,40 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { User } from '../models/users.interface';
+import { Component, Input } from '@angular/core';
 import { TaskComponent } from '../task/task.component';
-import { Task } from '../models/task.interface';
 import { NewTaskComponent } from '../new-task/new-task.component';
 import { TasksService } from '../services/tasks.service';
+import { Task } from '../models/task.interface';
+import { User } from '../models/users.interface';
 
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [TaskComponent, NewTaskComponent],
   templateUrl: './app-tasks.component.html',
   styleUrl: './app-tasks.component.css',
+  imports: [TaskComponent, NewTaskComponent],
 })
-export class AppTasksComponent {
+export class TasksComponent {
   @Input({ required: true }) user!: User;
-  @Output() newTask = new EventEmitter<boolean>();
-  isAddingTask: boolean;
-  private taskService: TasksService;
-
-  constructor() {
-    this.isAddingTask = false;
-    this.taskService = new TasksService;
-  }
+  isAddingTask = false;
+  
+  constructor(private tasksService: TasksService) {}
 
   get selectedUserTasks() {
-    return this.taskService.getSelectedUserTasks(this.user?.id);
+    return this.tasksService.getUserTasks(this.user.id);
   }
 
-  get tasks(){
-    return this.taskService.dummyTasks;
+  onCompleteTask(id: string) {
+    this.tasksService.completeTask(id);
   }
 
-  onCompletedTask(id: string) {
-    this.taskService.completeTask(id);
-  }
-
-  onAddTask() {
+  onStartAddTask() {
     this.isAddingTask = true;
-    this.newTask.emit(true);
-  }
-
-  addNewTask(task: Task) {
-    task.userId = this.user?.id ? this.user.id : '';
-    this.taskService.addNewTask(task)
-    this.isAddingTask = false;
   }
 
   onCancelAddTask() {
+    this.isAddingTask = false;
+  }
+
+  onAddTask(taskData: Task) {
     this.isAddingTask = false;
   }
 }

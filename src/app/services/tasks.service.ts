@@ -39,7 +39,7 @@ export class TasksService {
     this.completedTasks.push(id);
   }
 
-  getSelectedUserTasks(id?: string) {
+  getUserTasks(id?: string) {
     return this.dummyTasks.filter(
       (task) =>
         task.userId === id &&
