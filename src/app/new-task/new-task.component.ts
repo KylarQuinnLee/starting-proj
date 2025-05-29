@@ -11,7 +11,6 @@ import { TasksService } from '../services/tasks.service';
 })
 export class NewTaskComponent {
     @Input({required: true}) userId!: string;
-    @Output() add = new EventEmitter<Task>;
     enteredTitle = '';
     enteredDueDate = '';
     enteredSummary = '';

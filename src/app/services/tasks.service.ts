@@ -4,8 +4,7 @@ import { Task } from '../models/task.interface';
 @Injectable({
   providedIn: 'root',
 })
-export class TasksService {  
-  completedTasks: string[];
+export class TasksService {
   dummyTasks: Task[] = [
     {
       id: 't1',
@@ -32,22 +31,29 @@ export class TasksService {
     },
   ];
   constructor() {
-    this.completedTasks = [];
+    const tasks = localStorage.getItem('tasks');
+    if (tasks) {
+      this.dummyTasks = JSON.parse(tasks);
+    } else {
+      this.saveTasks();
+    }
+  }
+  
+  saveTasks() {
+    localStorage.setItem('tasks', this.dummyTasks.toString());
   }
 
   completeTask(id: string) {
-    this.completedTasks.push(id);
+    this.dummyTasks = this.dummyTasks.filter((task) => task.id !== id);
+    this.saveTasks();
   }
 
   getUserTasks(id?: string) {
-    return this.dummyTasks.filter(
-      (task) =>
-        task.userId === id &&
-        !this.completedTasks.find((completedTask) => completedTask === task.id)
-    );
+    return this.dummyTasks.filter((task) => task.userId === id);
   }
 
   addNewTask(task: Task) {
     this.dummyTasks.push(task);
+    this.saveTasks();
   }
 }
